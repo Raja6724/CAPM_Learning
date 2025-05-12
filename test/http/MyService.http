@@ -1,0 +1,66 @@
+@server = http://localhost:4004
+@auth = Authorization: Basic ulavalarajasekhar:
+
+
+### Employee
+# @name Employee_GET
+GET {{server}}/CAPMLearning/Employee
+{{auth}}
+
+
+### Employee Drafts GET
+# @name Employee_Drafts_GET
+GET {{server}}/CAPMLearning/Employee?$filter=(IsActiveEntity eq false)
+{{auth}}
+
+
+### Employee Draft POST
+# @name Employee_Draft_POST
+POST {{server}}/CAPMLearning/Employee
+Content-Type: application/json
+{{auth}}
+
+{
+  "name": "name-2477477",
+  "location": "location-2477477",
+  "designation": "designation-2477477",
+  "experianceinYears": 77,
+  "Skills": "Skills-2477477"
+}
+
+
+### Result from POST request above
+@draftID = {{Employee_Draft_POST.response.body.$.ID}}
+
+
+### Employee Draft PATCH
+# @name Employee_Draft_Patch
+PATCH {{server}}/CAPMLearning/Employee(ID={{draftID}},IsActiveEntity=false)
+Content-Type: application/json
+{{auth}}
+
+{
+  "name": "name-2477476",
+  "location": "location-2477476",
+  "designation": "designation-2477476",
+  "experianceinYears": 77,
+  "Skills": "Skills-2477476"
+}
+
+
+### Employee Draft Prepare
+# @name Employee_Draft_Prepare
+POST {{server}}/CAPMLearning/Employee(ID={{draftID}},IsActiveEntity=false)/AdminService.draftPrepare
+Content-Type: application/json
+{{auth}}
+
+{}
+
+
+### Employee Draft Activate
+# @name Employee_Draft_Activate
+POST {{server}}/CAPMLearning/Employee(ID={{draftID}},IsActiveEntity=false)/AdminService.draftActivate
+Content-Type: application/json
+{{auth}}
+
+{}
